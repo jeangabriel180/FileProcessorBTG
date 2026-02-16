@@ -191,7 +191,7 @@ Uso de gerenciamento adequado do ExecutorService e falha explícita em caso de t
 
 ---
 
-## 6️⃣ Uso incorreto de paralelismo para operação I/O-bound
+## 6️⃣ Uso incorreto de paralelismo
 
 ### 📍 Onde
 
@@ -199,7 +199,6 @@ Múltiplas threads lendo o mesmo arquivo.
 
 ### ⚠️ Impacto
 
-- Contenção de I/O
 - Performance degradada
 - Complexidade desnecessária
 
@@ -208,9 +207,9 @@ Múltiplas threads lendo o mesmo arquivo.
 Arquitetura correta:
 
 ```
-Leitura sequencial (I/O-bound)
+Leitura sequencial 
         ↓
-Processamento paralelo (CPU-bound)
+Processamento paralelo 
 ```
 
 ---
@@ -219,24 +218,10 @@ Processamento paralelo (CPU-bound)
 
 A solução final utiliza:
 
-- Leitura única do arquivo utilizando BufferedReader moderno (`Files.newBufferedReader`)
+- Leitura única do arquivo utilizando BufferedReader 
 - ExecutorService com thread pool fixo
-- Escrita por índice em array (`String[]`) para garantir thread safety e ordem determinística
+- Escrita por índice em array (`String[]`) para garantir thread safety e ordem de inserção
 - Gerenciamento correto do ciclo de vida das threads
-
-Arquitetura:
-
-```
-Arquivo
-  ↓
-Leitura sequencial
-  ↓
-Thread Pool (5 threads)
-  ↓
-Processamento paralelo
-  ↓
-Array de saída (thread-safe)
-```
 
 ---
 
