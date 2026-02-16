@@ -41,7 +41,6 @@ submit(...);
 
 - O arquivo é lido múltiplas vezes
 - Geração de dados duplicados
-- Alto custo de I/O
 - Baixa escalabilidade
 
 ### ✅ Correção
