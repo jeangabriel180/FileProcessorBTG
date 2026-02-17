@@ -9,13 +9,13 @@ uma solução correta, determinística e eficiente.
 
 ---
 
-# ❌ Problemas identificados no código original
+#  Problemas identificados no código original
 
 ---
 
 ## 1️⃣ Leitura do arquivo repetida
 
-### 📍 Onde
+###  Onde
 
 A leitura do arquivo ocorre dentro do `executor.submit()`:
 
@@ -37,13 +37,13 @@ submit(...);
 }
 ```
 
-### ⚠️ Impacto
+### ⚠ Impacto
 
 - O arquivo é lido múltiplas vezes
 - Geração de dados duplicados
 - Baixa escalabilidade
 
-### ✅ Correção
+###  Correção
 
 Ler o arquivo uma única vez e paralelizar apenas o processamento.
 
@@ -51,7 +51,7 @@ Ler o arquivo uma única vez e paralelizar apenas o processamento.
 
 ## 2️⃣ Uso de ArrayList compartilhado entre múltiplas threads (race condition)
 
-### 📍 Onde
+###  Onde
 
 ```java
 private static List<String> lines = new ArrayList<>();
@@ -63,7 +63,7 @@ E múltiplas threads executando:
 lines.add(line.toUpperCase());
 ```
 
-### ⚠️ Impacto
+### ⚠ Impacto
 
 ArrayList não é thread-safe e pode causar:
 
@@ -72,7 +72,7 @@ ArrayList não é thread-safe e pode causar:
 - Race conditions
 - Exceções intermitentes
 
-### ✅ Correção
+###  Correção
 
 Substituição por array `String[]`, onde cada thread escreve em um índice exclusivo:
 
@@ -95,7 +95,7 @@ Benefícios:
 
 ## 3️⃣ Falta de espera pela finalização das threads
 
-### 📍 Onde
+###  Onde
 
 ```java
 executor.shutdown();
@@ -104,7 +104,7 @@ System.out.
 println("Lines processed: "+lines.size());
 ```
 
-### ⚠️ Impacto
+### ⚠ Impacto
 
 `shutdown()` não bloqueia a execução.
 
@@ -114,7 +114,7 @@ O resultado pode ser:
 - incorreto
 - ou zero
 
-### ✅ Correção
+###  Correção
 
 Uso de awaitTermination:
 
@@ -137,7 +137,7 @@ IllegalStateException("Timeout processing file");
 
 ## 4️⃣ Gerenciamento incorreto de recursos
 
-### 📍 Onde
+###  Onde
 
 ```java
 BufferedReader br = new BufferedReader(new FileReader("data.txt"));
@@ -146,7 +146,7 @@ br.
 close();
 ```
 
-### ⚠️ Impacto
+### ⚠ Impacto
 
 Pode causar vazamento de recursos e erro:
 
@@ -154,7 +154,7 @@ Pode causar vazamento de recursos e erro:
 Too many open files
 ```
 
-### ✅ Correção
+###  Correção
 
 Uso de try-with-resources:
 
@@ -168,7 +168,7 @@ try(BufferedReader br = new BufferedReader(new FileReader("data.txt"))){
 
 ## 5️⃣ Tratamento de erro inadequado dentro das threads
 
-### 📍 Onde
+###  Onde
 
 ```java
 catch(Exception e){
@@ -178,13 +178,13 @@ printStackTrace();
 }
 ```
 
-### ⚠️ Impacto
+### ⚠ Impacto
 
 - Falhas silenciosas
 - Resultados inconsistentes
 - Falta de controle adequado
 
-### ✅ Correção
+###  Correção
 
 Uso de gerenciamento adequado do ExecutorService e falha explícita em caso de timeout.
 
@@ -192,16 +192,16 @@ Uso de gerenciamento adequado do ExecutorService e falha explícita em caso de t
 
 ## 6️⃣ Uso incorreto de paralelismo
 
-### 📍 Onde
+###  Onde
 
 Múltiplas threads lendo o mesmo arquivo.
 
-### ⚠️ Impacto
+### ⚠ Impacto
 
 - Performance degradada
 - Complexidade desnecessária
 
-### ✅ Correção
+###  Correção
 
 Arquitetura correta:
 
